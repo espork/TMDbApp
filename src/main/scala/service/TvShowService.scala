@@ -45,7 +45,7 @@ trait TvShowService extends TvShowApi with SeasonApi with PeopleApi {
   
   private def getTvShowDetails(tvShow: TvShow): Future[TvShow] = {
     for {
-      tvShowWithSeaons <- getDetails(tvShow)
+      tvShowWithSeaons <-  getDetails(tvShow).map( t => tvShow.copy(seasons = t.seasons))
       seasonsWithEpisodes <- getSeasonsDetails(tvShowWithSeaons)
     } yield tvShowWithSeaons.copy(seasons = seasonsWithEpisodes)
   }
