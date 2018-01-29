@@ -8,18 +8,18 @@ import model.{ TvShow, Season, Epsiode, Member }
 object TvApp extends App with TvShowService {
   
   getTop(10).onComplete {
-    case Success(top10) => fetchInfos(top10)
+    case Success(top10) => displayInfos(top10)
     case Failure(ex) => println(ex)
   }
   
-  def fetchInfos(tvShows: List[TvShow]): Unit = {
+  def displayInfos(tvShows: List[TvShow]): Unit = {
     tvShows match {
       case head::xs => {
         val future = getTvShowInfosAndCast(head)
         future.onComplete {
           case Success((tvShow, s)) => {
-            displayInfos(tvShow, s)
-            fetchInfos(xs)  
+            print(tvShow, s)
+            displayInfos(xs)  
           }
           case Failure(ex) => println(ex)
            
@@ -32,7 +32,7 @@ object TvApp extends App with TvShowService {
     }
   }
   
-  def displayInfos(tvShow: TvShow, cast: List[Member]) = {
+  def print(tvShow: TvShow, cast: List[Member]) = {
     println(s"${tvShow.name} : ${tvShow.voteAverage}")
     println("------ Top 10 Episodes -----")
     top10Episodes(tvShow).map( e => s"${e.name} : ${e.voteAverage}").foreach(println)
