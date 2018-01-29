@@ -15,7 +15,6 @@ trait TmdbApi extends AkkaExecutor with Config with JsonSupport {
   override implicit val system = ActorSystem()
   override implicit val materializer = ActorMaterializer()
   override implicit val executionContext = system.dispatcher
-  implicit val executor = scala.concurrent.ExecutionContext
   
   val client = Http().outgoingConnectionHttps(host = tmdbUrl)
    
