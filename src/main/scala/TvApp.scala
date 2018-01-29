@@ -5,7 +5,7 @@ import scala.util.{Failure, Success}
 import service.TvShowService
 import model.{ TvShow, Season, Epsiode, Member }
 
-object Tv extends App with TvShowService {
+object TvApp extends App with TvShowService {
   
   getTop(10).onComplete {
     case Success(top10) => fetchInfos(top10)
@@ -50,11 +50,8 @@ object Tv extends App with TvShowService {
   }
   
   def top10PopularActors(cast: List[Member]): List[Member] = {
-    def popularity(actor: Member) = actor.popularity match {
-      case Some(value) => - value
-      case _ => 0
-    } 
-    cast.sortBy(popularity).take(10)
+    def popularity(actor: Member) = actor.popularity.getOrElse(0.0)
+    cast.sortBy(- popularity(_)).take(10)
   }
   
 }
