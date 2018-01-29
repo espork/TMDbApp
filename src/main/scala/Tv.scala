@@ -4,16 +4,6 @@ import scala.concurrent.Future
 import scala.util.{Failure, Success}
 import service.TvShowService
 import model.{ TvShow, Season, Epsiode, Member }
-import akka.http.scaladsl.model.HttpResponse
-import akka.http.scaladsl.model.HttpRequest
-import akka.actor.ActorSystem
-import akka.stream.ActorMaterializer
-import akka.http.scaladsl.model._
-import StatusCodes._
-import HttpMethods._
-import akka.util.ByteString
-import scala.concurrent.Await
-import scala.concurrent.duration._
 
 object Tv extends App with TvShowService {
   
@@ -21,7 +11,6 @@ object Tv extends App with TvShowService {
     case Success(top10) => fetchInfos(top10)
     case Failure(ex) => println(ex)
   }
-  
   
   def fetchInfos(tvShows: List[TvShow]): Unit = {
     tvShows match {
@@ -43,7 +32,7 @@ object Tv extends App with TvShowService {
     }
   }
   
-def displayInfos(tvShow: TvShow, cast: List[Member]) = {
+  def displayInfos(tvShow: TvShow, cast: List[Member]) = {
     println(s"${tvShow.name} : ${tvShow.voteAverage}")
     println("------ Top 10 Episodes -----")
     top10Episodes(tvShow).map( e => s"${e.name} : ${e.voteAverage}").foreach(println)
@@ -52,7 +41,6 @@ def displayInfos(tvShow: TvShow, cast: List[Member]) = {
     println("------------\n")
   }
    
-  
   def top10Episodes(tvShow : TvShow): List[Epsiode] = {
     val allEpisodes = for {
       season <- tvShow.seasons

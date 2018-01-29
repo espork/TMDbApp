@@ -9,13 +9,9 @@ import StatusCodes._
 import HttpMethods._
 import akka.http.scaladsl.model.Uri.Query
 import spray.json._
-import akka.util.ByteString
 import akka.http.scaladsl.marshallers.sprayjson.SprayJsonSupport
-import akka.stream.scaladsl.Source
-import akka.stream.scaladsl.Sink
+import akka.stream.scaladsl.{ Source, Sink }
 import exceptions.TooManyRequestsException
-import scala.concurrent.duration._
-
 
 trait PeopleApi extends TmdbApi {
   

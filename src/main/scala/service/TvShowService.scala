@@ -1,12 +1,9 @@
 package service
 
-import http.TvShowApi
-import http.SeasonApi
-import http.PeopleApi
+import http.{ TvShowApi, SeasonApi, PeopleApi }
 import model.{ TvShow, Member, Season, Epsiode }
 import scala.concurrent.Future
-import scala.util.Failure
-import scala.util.Success
+import scala.util.{ Success, Failure }
 import exceptions.TooManyRequestsException
 import java.util.concurrent.TimeUnit
 
@@ -19,7 +16,6 @@ trait TvShowService extends TvShowApi with SeasonApi with PeopleApi {
     val castWithDetails =  getCast(tvShow).flatMap(getCastDetails)
     tvShowWithDetails zip castWithDetails
   }
-  
   
   //Backoff strategy -- The api accepts only 40 requests every 10 seconds
   private def getAcotorDetail (actor: Member,  retryAfter: Int = 0):Future[Member] = {

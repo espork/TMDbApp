@@ -11,13 +11,10 @@ import model.{ TvShow, Member }
 import spray.json._
 import akka.util.ByteString
 import akka.http.scaladsl.marshallers.sprayjson.SprayJsonSupport
-import akka.stream.scaladsl.Source
-import akka.stream.scaladsl.Sink
+import akka.stream.scaladsl.{ Source, Sink }
 import exceptions.TooManyRequestsException
 
 trait TvShowApi extends TmdbApi{
-  
-  
   
   def getTopRated(page: Integer = 1): Future[List[TvShow]] = {
     val uri = Uri("/3/tv/top_rated")  
@@ -59,9 +56,7 @@ trait TvShowApi extends TmdbApi{
         response.discardEntityBytes()
         Future.failed(new Exception("Unable to fetch tv show details"))
       }
-      
     }).runWith(Sink.head)
-    
   }
   
   def getCast(tvShow: TvShow): Future[List[Member]] = {
