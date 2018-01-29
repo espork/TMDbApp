@@ -21,15 +21,15 @@ trait TvShowService extends TvShowApi with SeasonApi with PeopleApi {
   private def getAcotorDetail (actor: Member,  retryAfter: Int = 0):Future[Member] = {
     if(retryAfter > 0) TimeUnit.SECONDS.sleep(retryAfter)
     getDetail(actor).recoverWith {
-            case ex: TooManyRequestsException => getAcotorDetail(actor,ex.retryAfter)
-      }
+      case ex: TooManyRequestsException => getAcotorDetail(actor,ex.retryAfter)
+    }
   }
   
   //Backoff strategy
   private def getSeasonDetail(tvShow: TvShow, season: Season, retryAfter: Int = 0): Future[Season] = {
     if(retryAfter > 0) TimeUnit.SECONDS.sleep(retryAfter)
       getDetails(tvShow, season).recoverWith{
-            case ex: TooManyRequestsException => getSeasonDetail(tvShow,season, ex.retryAfter)
+        case ex: TooManyRequestsException => getSeasonDetail(tvShow,season, ex.retryAfter)
       }
   }
   

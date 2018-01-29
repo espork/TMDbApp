@@ -19,9 +19,9 @@ trait TmdbApi extends AkkaExecutor with Config with JsonSupport {
   
   val client = Http().outgoingConnectionHttps(host = tmdbUrl)
    
-  def getRetryAfter(headers: Seq[HttpHeader]) = {
-    headers.find( _.name == "Retry-After")
-    .flatMap(header => Try(header.value.toInt).toOption)
-              .getOrElse(0)
-  }
+  def getRetryAfter(headers: Seq[HttpHeader]) = 
+    headers.find( _.name == "Retry-After").flatMap(header => Try(header.value.toInt)
+        .toOption)
+        .getOrElse(0)
+  
 }
