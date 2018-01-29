@@ -28,7 +28,7 @@ trait TvShowService extends TvShowApi with SeasonApi with PeopleApi {
   //Backoff strategy
   private def getSeasonDetail(tvShow: TvShow, season: Season, retryAfter: Int = 0): Future[Season] = {
     if(retryAfter > 0) TimeUnit.SECONDS.sleep(retryAfter)
-      getDetails(tvShow, season).recoverWith{
+      getDetails(tvShow, season).recoverWith {
         case ex: TooManyRequestsException => getSeasonDetail(tvShow,season, ex.retryAfter)
       }
   }
@@ -43,11 +43,8 @@ trait TvShowService extends TvShowApi with SeasonApi with PeopleApi {
     Future.foldLeft(seasons)(List.empty[Season]){ (acc, season) => season :: acc }
   }
   
-  private def getTvShowDetails(tvShow: TvShow): Future[TvShow] = {
-    for {
+  private def getTvShowDetails(tvShow: TvShow): Future[TvShow] = for {
       tvShowWithSeaons <-  getDetails(tvShow).map( t => tvShow.copy(seasons = t.seasons))
       seasonsWithEpisodes <- getSeasonsDetails(tvShowWithSeaons)
     } yield tvShowWithSeaons.copy(seasons = seasonsWithEpisodes)
-  }
-  
 }
