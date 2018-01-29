@@ -23,8 +23,7 @@ trait SeasonApi extends TmdbApi {
     
     Source.single(request).via(client).mapAsync(1)( resp => resp match {
       
-      case HttpResponse(OK, headers, entity, _) =>
-        Unmarshal(entity).to[Season]
+      case HttpResponse(OK, headers, entity, _) => Unmarshal(entity).to[Season]
       case response @ HttpResponse(TooManyRequests, headers, _, _) => {
         val retryAfter = getRetryAfter(headers)
         response.discardEntityBytes()

@@ -25,8 +25,7 @@ trait TvShowApi extends TmdbApi{
     val request = HttpRequest(GET, uri = uri.withQuery(query))
    
     Source.single(request).via(client).mapAsync(1)( resp => resp match {
-      case HttpResponse(a, headers, entity, _) =>
-        Unmarshal(resp.entity).to[List[TvShow]]
+      case HttpResponse(a, headers, entity, _) => Unmarshal(resp.entity).to[List[TvShow]]
       case response @ HttpResponse(TooManyRequests, headers, _, _) => {
         val retryAfter = getRetryAfter(headers)
         response.discardEntityBytes()
@@ -45,8 +44,7 @@ trait TvShowApi extends TmdbApi{
     val request = HttpRequest(GET, uri = uri.withQuery(query))
    
     Source.single(request).via(client).mapAsync(1)( resp => resp match {
-      case HttpResponse(a, headers, entity, _) =>
-        Unmarshal(entity).to[TvShow]
+      case HttpResponse(a, headers, entity, _) => Unmarshal(entity).to[TvShow]
       case response @ HttpResponse(TooManyRequests, headers, _, _) => {
         val retryAfter = getRetryAfter(headers)
         response.discardEntityBytes()
@@ -65,9 +63,7 @@ trait TvShowApi extends TmdbApi{
     val request = HttpRequest(GET, uri = uri.withQuery(query))
     
     Source.single(request).via(client).mapAsync(1)( resp => resp match {
-      case HttpResponse(a, headers, entity, _) =>
-        Unmarshal(entity).to[List[Member]]
-        
+      case HttpResponse(a, headers, entity, _) => Unmarshal(entity).to[List[Member]]
       case response @ HttpResponse(TooManyRequests, headers, _, _) => {
         val retryAfter = getRetryAfter(headers)
         response.discardEntityBytes()

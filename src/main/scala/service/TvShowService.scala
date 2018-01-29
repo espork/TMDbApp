@@ -20,28 +20,16 @@ trait TvShowService extends TvShowApi with SeasonApi with PeopleApi {
   //Backoff strategy -- The api accepts only 40 requests every 10 seconds
   private def getAcotorDetail (actor: Member,  retryAfter: Int = 0):Future[Member] = {
     if(retryAfter > 0) TimeUnit.SECONDS.sleep(retryAfter)
-    getDetail(actor).transformWith{
-        case Success(s) => Future{s}
-        case Failure(ex) => {
-          ex match {
+    getDetail(actor).recoverWith {
             case ex: TooManyRequestsException => getAcotorDetail(actor,ex.retryAfter)
-            case _ => Future.failed(ex)
-          }
-        }
       }
   }
   
   //Backoff strategy
   private def getSeasonDetail(tvShow: TvShow, season: Season, retryAfter: Int = 0): Future[Season] = {
     if(retryAfter > 0) TimeUnit.SECONDS.sleep(retryAfter)
-      getDetails(tvShow, season).transformWith{
-        case Success(s) => Future{s}
-        case Failure(ex) => {
-          ex match {
+      getDetails(tvShow, season).recoverWith{
             case ex: TooManyRequestsException => getSeasonDetail(tvShow,season, ex.retryAfter)
-            case _ =>  Future.failed(ex)
-          }
-        }
       }
   }
   

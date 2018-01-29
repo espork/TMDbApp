@@ -21,8 +21,7 @@ trait PeopleApi extends TmdbApi {
     val request = HttpRequest(GET, uri = uri.withQuery(query))
       
     Source.single(request).via(client).mapAsync(1)( resp => resp match {
-      case HttpResponse(OK, headers, entity, _) =>
-        Unmarshal(entity).to[Member]
+      case HttpResponse(OK, headers, entity, _) => Unmarshal(entity).to[Member]
       case response @ HttpResponse(TooManyRequests, headers, _, _) => {
         val retryAfter = getRetryAfter(headers)
         response.discardEntityBytes()
